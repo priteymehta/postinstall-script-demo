@@ -15,7 +15,7 @@ var configObject = {
         appId: null,
         measurementId: null
     },
-    nodeAPIURL: null
+    apiEndpoint: null
 } // config sample object
 const filePath = "src/config.json"; //config file path
 
@@ -28,7 +28,7 @@ var checkFortheDataAvailability = new Promise((resolve, reject) => {
     let askForAllTheDetails = false;
     if (!fsObj.existsSync(filePath)) {
         // if files does not exists
-        fsObj.writeFileSync(filePath,"");
+        fsObj.writeFileSync(filePath, "");
     }
     try {
         // check if file having read/write permission or not.
@@ -129,13 +129,12 @@ var checkFortheDataAvailability = new Promise((resolve, reject) => {
 
 
 var askFortheDetails = async (_queArray) => {
-    // Backend API url question
-    var backendAPIURLQuestions = {
+    // Question object for the API endpoint.
+    var apiEndpointQuestion = {
         type: 'input',
-        name: 'nodeAPIURL',
-        message: "Please enter Backend API URL:"
+        name: 'apiEndpoint',
+        message: "Please enter API endpoint:"
     }
-    //console.log(configObject);
     //#endregion >> create object for question
     // get the values from user for firebase configuration.
     await pkg.prompt(_queArray).then(objResponse => {
@@ -145,32 +144,21 @@ var askFortheDetails = async (_queArray) => {
             }
         }
         console.log(configObject);
-        // configObject.firebaseConfig[_queArray]
     })
 
-    // get the node api url from user
-    await pkg.prompt(backendAPIURLQuestions).then(objResponse => {
-        configObject.nodeAPIURL = objResponse.nodeAPIURL;
+    // get the api endpoint from user
+    await pkg.prompt(apiEndpointQuestion).then(objResponse => {
+        configObject.apiEndpoint = objResponse.apiEndpoint;
     })
+
     var json = JSON.stringify(configObject);
-
-    // This text will be written on file input.text
     const textContent = json;
-
-    // Starting position in file
-    const position = 0;
-
-    // writeSync returns number of bytes written
-    // on file which is stores in this variable
+    const position = 0; // Starting position in file
     writeFileSync(filePath, textContent);
-    // const numberOfBytesWritten =
-    //     writeSync(fd, textContent, position, 'utf8');
-
 }
 
+// call the function
 checkFortheDataAvailability.then((queArray) => {
-    console.log("cofig que arr", queArray)
-
     if (queArray && queArray.length > 0) {
         askFortheDetails(queArray);
     }
