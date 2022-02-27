@@ -108,7 +108,7 @@ var checkFortheDataAvailability = new Promise((resolve, reject) => {
                     {
                         type: 'input',
                         name: 'appId',
-                        message: "messagingSenderId:"
+                        message: "appId:"
                     },
                     {
                         type: 'input',
